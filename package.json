@@ -5,9 +5,12 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "wix:check": "node --env-file=.env scripts/wix-check.mjs"
   },
   "dependencies": {
+    "@wix/sdk": "^1.21.18",
+    "@wix/stores": "^1.0.956",
     "astro": "^7.4.0"
   }
 }
