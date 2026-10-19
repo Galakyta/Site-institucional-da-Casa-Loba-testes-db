@@ -1,19 +1,9 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Casa Loba — [TÍTULO DA PÁGINA]</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Nunito:wght@400;600;700&display=swap"
-    rel="stylesheet"
-  />
-  
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<body>
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+
 
   <!--hero-->
   <section class="hero" id="topo">
@@ -23,7 +13,7 @@
       <div class="container nav-flutuante__inner">
         <a href="#topo" class="logo">
           <span class="logo__texto">casa</span>
-          <img src="assets/images/lobo_logo.svg" alt="Loba uivando" class="logo__icone" />
+          <img src="/assets/images/lobo_logo.svg" alt="Loba uivando" class="logo__icone" />
           <span class="logo__texto">loba</span>
         </a>
         <div class="nav-links">
@@ -221,6 +211,5 @@
   </footer>
 
 
-  <script src="js/script.js"></script>
-</body>
-</html>
+  <script is:inline src="/js/script.js"></script>
+</Layout>
