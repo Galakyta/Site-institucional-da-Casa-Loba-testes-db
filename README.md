@@ -8,7 +8,7 @@ O site é a vitrine da marca e a porta de entrada da comunidade: apresenta a Cas
 
 - **Front-end:** [Astro](https://astro.build/) (código neste repositório).
 - **Negócio (membros, planos, pagamentos, vídeos):** Wix Headless. A publicação e a hospedagem são feitas pelo Wix.
-- **Pagamento:** Stripe (integração com o Wix ainda em validação).
+- **Pagamento:** Ticto, à pedido da Amabile.
 
 ## Estrutura de pastas
 
