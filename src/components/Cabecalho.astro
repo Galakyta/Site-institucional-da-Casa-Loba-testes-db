@@ -2,6 +2,7 @@
 // Deixei p usar o cabeçalho em tudo -- att Lanna
 import type { Usuaria } from "../lib/usuaria-mock";
 import ModalLogin from "./ModalLogin.astro";
+import ModalCadastro from "./ModalCadastro.astro";
 
 interface Props {
   // Dados da usuária logada. Sem eles, mostra o botão de entrar.
@@ -43,7 +44,12 @@ const { usuaria, solido = false } = Astro.props;
   </div>
 </nav>
 
-{!usuaria && <ModalLogin />}
+{!usuaria && (
+  <>
+    <ModalLogin />
+    <ModalCadastro />
+  </>
+)}
 
 <script src="../scripts/menu.js"></script>
 
