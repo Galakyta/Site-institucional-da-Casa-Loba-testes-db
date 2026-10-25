@@ -1,0 +1,154 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Cabecalho from "../../../components/Cabecalho.astro";
+import { usuariaMock } from "../../../lib/usuaria-mock";
+import {
+  conteudosMembros,
+  obterPlanoMembro,
+  temAcessoAoConteudo,
+} from "../../../lib/membros";
+
+export function getStaticPaths() {
+  return conteudosMembros.map((conteudo) => ({
+    params: { slug: conteudo.slug },
+    props: { conteudo },
+  }));
+}
+
+const { conteudo } = Astro.props;
+const liberado = temAcessoAoConteudo(usuariaMock.plano.nome, conteudo.plano);
+const planoNecessario = obterPlanoMembro(conteudo.plano);
+const planoAtual = obterPlanoMembro(usuariaMock.plano.nome);
+---
+
+<Layout titulo={conteudo.titulo}>
+  <Cabecalho usuaria={usuariaMock} solido />
+
+  <main class="pagina-conteudo">
+    <div class="container pagina-conteudo__container">
+      <a class="pagina-conteudo__voltar" href="/membros">← Voltar para a área de membros</a>
+
+      {liberado ? (
+        <article class="artigo">
+          <p class="tag tag--ameixa">{conteudo.categoria}</p>
+          <h1>{conteudo.titulo}</h1>
+          <p class="artigo__resumo">{conteudo.resumo}</p>
+          <div class="artigo__corpo">
+            <p>{conteudo.conteudo}</p>
+            <p>Este conteúdo é uma demonstração e poderá ser expandido com os materiais da Casa Loba.</p>
+          </div>
+          <a class="btn btn--ameixa" href="/membros">Voltar aos conteúdos</a>
+        </article>
+      ) : (
+        <section class="bloqueio" aria-labelledby="bloqueio-titulo">
+          <div class="bloqueio__icone" aria-hidden="true">🔒</div>
+          <p class="tag tag--ameixa">conteúdo exclusivo</p>
+          <h1 id="bloqueio-titulo">Este conteúdo está guardado para outro plano.</h1>
+          <p class="bloqueio__descricao">
+            “{conteudo.titulo}” está disponível a partir do plano
+            <strong> {planoNecessario?.nome ?? conteudo.plano}</strong>.
+            {planoAtual
+              ? ` Seu plano atual é ${planoAtual.nome}.`
+              : " Não identificamos um plano ativo para esta demonstração."}
+          </p>
+          <div class="bloqueio__acoes">
+            <a class="btn btn--vermelho" href="/#secao-planos">Conhecer os planos</a>
+            <a class="btn btn--ghost" href="/membros">Voltar à área de membros</a>
+          </div>
+          <p class="bloqueio__nota">
+            O acesso é demonstrativo e usa o plano definido em
+            <code>src/lib/usuaria-mock.ts</code>. A validação real depende da autenticação
+            e do banco de dados.
+          </p>
+        </section>
+      )}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .pagina-conteudo {
+    min-height: 100vh;
+    padding: 120px 0 80px;
+    background: var(--creme);
+  }
+
+  .pagina-conteudo__container {
+    max-width: 880px;
+  }
+
+  .pagina-conteudo__voltar {
+    display: inline-block;
+    margin-bottom: 32px;
+    font-family: var(--font-titulo);
+    font-weight: 700;
+  }
+
+  .pagina-conteudo__voltar:hover {
+    color: var(--vermelho);
+  }
+
+  .artigo,
+  .bloqueio {
+    padding: clamp(28px, 7vw, 64px);
+    border-radius: var(--raio);
+    background: #fff;
+  }
+
+  .artigo h1,
+  .bloqueio h1 {
+    max-width: 700px;
+    margin-bottom: 20px;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+  }
+
+  .artigo__resumo {
+    font-size: 1.2rem;
+    opacity: 0.75;
+  }
+
+  .artigo__corpo {
+    display: grid;
+    gap: 20px;
+    margin: 36px 0;
+    padding-top: 28px;
+    border-top: 1px solid rgba(43, 28, 46, 0.15);
+  }
+
+  .bloqueio {
+    background: var(--agua);
+  }
+
+  .bloqueio__icone {
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+  }
+
+  .bloqueio__descricao {
+    max-width: 620px;
+    font-size: 1.1rem;
+  }
+
+  .bloqueio__acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .bloqueio__nota {
+    margin-top: 32px;
+    font-size: 0.85rem;
+    opacity: 0.75;
+  }
+
+  @media (max-width: 560px) {
+    .pagina-conteudo {
+      padding-top: 100px;
+    }
+
+    .bloqueio__acoes {
+      flex-direction: column;
+    }
+  }
+</style>

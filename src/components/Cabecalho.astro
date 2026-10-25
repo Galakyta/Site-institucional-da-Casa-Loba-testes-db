@@ -29,7 +29,7 @@ const { usuaria, solido = false } = Astro.props;
     <div class="nav-links">
       <a href="/#secao-sobre">[LINK: sobre a casa]</a>
       <a href="/#secao-frentes">[LINK: frentes]</a>
-      <a href="/#secao-planos">[LINK: planos]</a>
+      <a href="/membros" class="nav-planos">planos</a>
       {usuaria ? (
         <a href="/perfil" class="perfil-link" aria-label={`Meu perfil (${usuaria.nome})`}>
           <span class="perfil-link__avatar" aria-hidden="true">
@@ -163,7 +163,7 @@ const { usuaria, solido = false } = Astro.props;
   }
 
   @media (max-width: 560px) {
-    .nav-links a:not(.btn, .perfil-link) {
+    .nav-links a:not(.btn, .perfil-link, .nav-planos) {
       display: none;
     }
 
