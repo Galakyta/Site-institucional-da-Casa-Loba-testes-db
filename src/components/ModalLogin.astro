@@ -1,0 +1,78 @@
+---
+// Modal de login. Login é só modal: não existe a rota /login.
+// Aberto pelo botão de entrar do cabeçalho.
+import Modal from "./Modal.astro";
+---
+
+<Modal id="modalLogin" titulo="login">
+  <p class="modal-login__chamada">
+    Ainda não tem uma conta? <button type="button" class="link" data-abrir-modal="modalCadastro">Cadastre-se</button>
+  </p>
+
+  <!-- PLACEHOLDER: o formulário não envia nada, só impede o recarregamento da página.
+       Para virar funcional, precisa da autenticação de membros do Wix Headless. -->
+  <form class="modal-login__form" data-form-placeholder>
+    <label class="campo">
+      <span>Email</span>
+      <input class="campo__entrada" type="email" name="email" autocomplete="email" />
+    </label>
+
+    <label class="campo">
+      <span>Senha</span>
+      <input class="campo__entrada" type="password" name="senha" autocomplete="current-password" />
+    </label>
+
+    <!-- PLACEHOLDER: link sem destino até existir a recuperação de senha
+         (src/pages/recuperar-senha.astro, prevista no README). -->
+    <a href="#" class="link modal-login__esqueci" data-link-placeholder>Esqueci minha senha</a>
+
+    <!-- PLACEHOLDER: "Não sou um robô" apenas visual, ver .robo em src/styles/formulario.css. -->
+    <label class="robo">
+      <input type="checkbox" name="robo" />
+      <span>Não sou um robô</span>
+    </label>
+
+    <button type="submit" class="btn btn--vermelho modal-login__enviar">login</button>
+  </form>
+</Modal>
+
+<style>
+  .modal-login__chamada {
+    margin-top: 12px;
+    font-size: 1.25rem;
+    text-align: center;
+  }
+
+  .modal-login__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .modal-login__esqueci {
+    align-self: flex-start;
+    margin-top: 8px;
+  }
+
+  .robo {
+    margin-top: 12px;
+  }
+
+  .modal-login__enviar {
+    align-self: center;
+    min-width: 240px;
+    margin-top: 16px;
+  }
+
+  @media (max-width: 560px) {
+    .modal-login__chamada {
+      font-size: 1.1rem;
+    }
+
+    .modal-login__enviar {
+      align-self: stretch;
+      min-width: 0;
+    }
+  }
+</style>

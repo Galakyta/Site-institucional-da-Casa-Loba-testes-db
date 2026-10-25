@@ -1,6 +1,7 @@
 ---
 // Deixei p usar o cabeçalho em tudo -- att Lanna
 import type { Usuaria } from "../lib/usuaria-mock";
+import ModalLogin from "./ModalLogin.astro";
 
 interface Props {
   // Dados da usuária logada. Sem eles, mostra o botão de entrar.
@@ -36,11 +37,13 @@ const { usuaria, solido = false } = Astro.props;
           <span class="perfil-link__nome">{usuaria.nome}</span>
         </a>
       ) : (
-        <a href="/#secao-planos" class="btn btn--sm btn--vermelho">[BOTÃO: entrar / assinar]</a>
+        <button type="button" class="btn btn--sm btn--vermelho" data-abrir-modal="modalLogin">[BOTÃO: entrar / assinar]</button>
       )}
     </div>
   </div>
 </nav>
+
+{!usuaria && <ModalLogin />}
 
 <script src="../scripts/menu.js"></script>
 
@@ -97,12 +100,14 @@ const { usuaria, solido = false } = Astro.props;
     font-weight: 600;
   }
 
-  .nav-links a {
+  .nav-links a,
+  .nav-links button {
     font-size: 0.95rem;
     transition: opacity 0.2s;
   }
 
-  .nav-links a:hover {
+  .nav-links a:hover,
+  .nav-links button:hover {
     opacity: 0.6;
   }
 
