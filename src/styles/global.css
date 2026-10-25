@@ -105,6 +105,9 @@ h1, h2, h3 {
   font-family: var(--font-titulo);
   font-weight: 700;
   font-size: 1rem;
+  /* <button> não herda estes dois por padrão; <a> já herda */
+  line-height: inherit;
+  text-align: inherit;
   padding: 14px 28px;
   border-radius: var(--capsula);
   border: 2px solid transparent;
