@@ -1,0 +1,168 @@
+---
+// Deixei p usar o cabeçalho em tudo -- att Lanna
+import type { Usuaria } from "../lib/usuaria-mock";
+
+interface Props {
+  // Dados da usuária logada. Sem eles, mostra o botão de entrar.
+  usuaria?: Usuaria;
+  // Páginas internas, sem hero: começa e fica sempre no estado sólido.
+  solido?: boolean;
+}
+
+const { usuaria, solido = false } = Astro.props;
+---
+
+<!-- navegação flutuante -->
+<nav
+  class:list={["nav-flutuante", { "is-scrolled": solido }]}
+  id="navFlutuante"
+  data-sempre-solido={solido ? "" : undefined}
+>
+  <div class="container nav-flutuante__inner">
+    <a href="/#topo" class="logo">
+      <span class="logo__texto">casa</span>
+      <img src="/assets/images/lobo_logo.svg" alt="Loba uivando" class="logo__icone" />
+      <span class="logo__texto">loba</span>
+    </a>
+    <div class="nav-links">
+      <a href="/#secao-sobre">[LINK: sobre a casa]</a>
+      <a href="/#secao-frentes">[LINK: frentes]</a>
+      <a href="/#secao-planos">[LINK: planos]</a>
+      {usuaria ? (
+        <a href="/perfil" class="perfil-link" aria-label={`Meu perfil (${usuaria.nome})`}>
+          <span class="perfil-link__avatar" aria-hidden="true">
+            {usuaria.imagem ? <img src={usuaria.imagem} alt="" /> : usuaria.nome.charAt(0).toUpperCase()}
+          </span>
+          <span class="perfil-link__nome">{usuaria.nome}</span>
+        </a>
+      ) : (
+        <a href="/#secao-planos" class="btn btn--sm btn--vermelho">[BOTÃO: entrar / assinar]</a>
+      )}
+    </div>
+  </div>
+</nav>
+
+<script src="../scripts/menu.js"></script>
+
+<style>
+  /* menu*/
+  .nav-flutuante {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 20px 0;
+    transition: background 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .nav-flutuante__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* LOGO */
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-titulo);
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.03em;
+    color: var(--ameixa);
+    transition: opacity 0.2s;
+  }
+
+  .logo:hover {
+    opacity: 0.8;
+  }
+
+  .logo__texto {
+    line-height: 1;
+  }
+
+  .logo__icone {
+    width: auto;
+    height: 1.5em;
+    display: block;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    font-family: var(--font-titulo);
+    font-weight: 600;
+  }
+
+  .nav-links a {
+    font-size: 0.95rem;
+    transition: opacity 0.2s;
+  }
+
+  .nav-links a:hover {
+    opacity: 0.6;
+  }
+
+  /* Estado "rolado": barra sólida no topo */
+  .nav-flutuante.is-scrolled {
+    background: var(--creme);
+    padding: 12px 0;
+    box-shadow: 0 1px 0 rgba(43, 28, 46, 0.08);
+  }
+
+  /* Estado logado: cápsula com contorno ameixa, avatar e nome */
+  .perfil-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 16px 4px 4px;
+    border: 1.5px solid var(--ameixa);
+    border-radius: var(--capsula);
+    font-weight: 700;
+  }
+
+  .perfil-link__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--capsula);
+    overflow: hidden;
+    background: var(--vermelho);
+    color: var(--creme);
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .perfil-link__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 860px) {
+    .nav-links {
+      gap: 16px;
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .nav-links a:not(.btn, .perfil-link) {
+      display: none;
+    }
+
+    /* No celular, só o avatar */
+    .perfil-link {
+      padding: 4px;
+    }
+
+    .perfil-link__nome {
+      display: none;
+    }
+  }
+</style>
