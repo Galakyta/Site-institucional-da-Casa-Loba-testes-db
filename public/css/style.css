@@ -574,11 +574,14 @@ h1, h2, h3 {
   }
 
   /* Arco superior esquerdo — mobile */
+   /* Arco superior esquerdo — mobile */
   .hero__arco--topo {
-    top: -80px;
-    left: -60px;
-    width: 160px;
-    height: 160px;
-    border-radius: 0 0 80px 80px;
+    display: none; /* ✅ CORREÇÃO 1: Esconde pra não cobrir a logo */
+  }
+
+  /* ✅ CORREÇÃO 2: Muda a cor do botão do Hero no mobile */
+  .hero__acoes .btn--vermelho {
+    background: var(--ameixa);
+    color: var(--creme);
   }
 }
