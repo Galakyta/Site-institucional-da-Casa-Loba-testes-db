@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "wix:check": "node --env-file=.env scripts/wix-check.mjs"
+    "wix:check": "node --env-file-if-exists=.env scripts/wix-check.mjs"
   },
   "dependencies": {
     "@wix/sdk": "^1.21.18",
