@@ -1,5 +1,3 @@
-
-
 :root {
   /* Cores */
   --vermelho: #DA4D3F;
@@ -362,9 +360,22 @@ h1, h2, h3 {
 .card__titulo { font-size: 1.5rem; }
 .card__texto  { font-size: 1rem; opacity: 0.85; }
 
+/* seção nova de planos com fundo bordo*/
 .planos {
   padding: 120px 0;
-  background: var(--agua);
+  background: #470E31; /* NOVO FUNDO */
+}
+
+
+.planos .section-titulo,
+.planos .section-sub {
+  color: var(--creme);
+}
+
+
+.planos .tag--ameixa {
+  color: var(--creme);
+  border-color: var(--creme);
 }
 
 .plano {
@@ -519,7 +530,9 @@ h1, h2, h3 {
 
 .footer__copy { font-size: 0.85rem; opacity: 0.6; }
 
-/* responsividade */
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
 @media (max-width: 860px) {
   .publico__inner {
     grid-template-columns: 1fr;
@@ -573,13 +586,12 @@ h1, h2, h3 {
     border-radius: 110px 110px 0 0;
   }
 
-  /* Arco superior esquerdo — mobile */
-   /* Arco superior esquerdo — mobile */
+  
   .hero__arco--topo {
-    display: none; /* ✅ CORREÇÃO 1: Esconde pra não cobrir a logo */
+    display: none; 
   }
 
-  /* ✅ CORREÇÃO 2: Muda a cor do botão do Hero no mobile */
+ 
   .hero__acoes .btn--vermelho {
     background: var(--ameixa);
     color: var(--creme);
