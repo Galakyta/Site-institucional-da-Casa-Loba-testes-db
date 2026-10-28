@@ -1,339 +1,78 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Cabecalho from "../../components/Cabecalho.astro";
-import { usuariaMock } from "../../lib/usuaria-mock";
-import {
-  conteudosMembros,
-  obterPlanoMembro,
-  temAcessoAoConteudo,
-} from "../../lib/membros";
-
-const planoAtual = obterPlanoMembro(usuariaMock.plano.nome);
-const nomePlano = planoAtual?.nome ?? "sem plano identificado";
+import AreaProtegida from "../../components/AreaProtegida.astro";
 ---
 
 <Layout titulo="Área de membros">
-  <Cabecalho usuaria={usuariaMock} solido />
-
-  <main class="area-membros">
-    <div class="container area-membros__container">
-      <a class="area-membros__voltar" href="/#secao-planos">← Conheça os planos</a>
-
-      <header class="boas-vindas">
-        <p class="tag tag--ameixa">área de membros</p>
-        <h1>Que bom ter você aqui, {usuariaMock.nome}.</h1>
-        <p>Um espaço para aprender, trocar e encontrar apoio no seu tempo.</p>
-        <div class="boas-vindas__plano">
-          <span>Seu plano</span>
-          <strong>{nomePlano}</strong>
-        </div>
-      </header>
-
-      <section class="beneficios" aria-labelledby="beneficios-titulo">
-        <div class="secao-cabecalho">
-          <div>
-            <p class="tag tag--ameixa">seu espaço</p>
-            <h2 id="beneficios-titulo">Um lugar na matilha</h2>
-          </div>
-          <a class="btn btn--ghost" href="/#secao-planos">Ver outros planos</a>
-        </div>
-        <div class="beneficios__lista">
-          {(planoAtual?.beneficios ?? []).map((beneficio) => (
-            <div class="beneficio">
-              <span aria-hidden="true">✓</span>
-              <p>{beneficio}</p>
-            </div>
-          ))}
-          {!planoAtual && (
-            <p class="aviso-plano">
-              Não foi possível identificar seu plano de demonstração. Atualize o plano
-              em <code>src/lib/usuaria-mock.ts</code> para habilitar os conteúdos.
-            </p>
-          )}
-        </div>
-      </section>
-
-      <section class="conteudos" aria-labelledby="conteudos-titulo">
-        <div class="secao-cabecalho">
-          <div>
-            <p class="tag tag--ameixa">conteúdos</p>
-            <h2 id="conteudos-titulo">Feito para caminhar junto</h2>
-          </div>
-          <p class="conteudos__legenda">Os conteúdos disponíveis variam conforme seu plano.</p>
-        </div>
-
-        <div class="conteudos__grade">
-          {conteudosMembros.map((conteudo) => {
-            const liberado = temAcessoAoConteudo(usuariaMock.plano.nome, conteudo.plano);
-            const planoConteudo = obterPlanoMembro(conteudo.plano);
-
-            return (
-              <article class:list={["conteudo-card", { "conteudo-card--bloqueado": !liberado }]}>
-                <p class="conteudo-card__categoria">{conteudo.categoria}</p>
-                <h3>{conteudo.titulo}</h3>
-                <p class="conteudo-card__resumo">{conteudo.resumo}</p>
-                <div class="conteudo-card__rodape">
-                  <span class:list={["conteudo-card__status", { "conteudo-card__status--bloqueado": !liberado }]}>
-                    {liberado ? "Disponível" : `Plano ${planoConteudo?.nome ?? conteudo.plano}`}
-                  </span>
-                  <a href={`/membros/conteudos/${conteudo.slug}`} aria-label={`${liberado ? "Acessar" : "Ver conteúdo bloqueado"}: ${conteudo.titulo}`}>
-                    {liberado ? "Acessar →" : "Saiba mais →"}
-                  </a>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <aside class="convite-plano">
-        <div>
-          <p class="tag">mais da Casa Loba</p>
-          <h2>Tem mais para descobrir na matilha.</h2>
-          <p>Conheça os planos e veja qual combina com o seu momento.</p>
-        </div>
-        <a class="btn btn--vermelho" href="/#secao-planos">Conhecer os planos</a>
-      </aside>
-      <p class="nota-demo">
-        Área demonstrativa: plano e conteúdos usam dados locais e ainda não validam uma
-        assinatura real.
-      </p>
-    </div>
-  </main>
+  <Cabecalho solido />
+  <AreaProtegida>
+    <main class="pagina-membros">
+      <div class="container">
+        <a class="membros-voltar" href="/#secao-planos">← Conheça os planos</a>
+        <header class="membros-cabecalho">
+          <p class="tag">área de membros</p>
+          <h1 data-boas-vindas>Que bom ter você aqui.</h1>
+          <p>Um espaço para aprender, trocar e encontrar apoio no seu tempo.</p>
+          <p class="membros-plano"><span>Seu plano</span><strong data-plano-atual></strong></p>
+        </header>
+        <section class="membros-secao" aria-labelledby="titulo-liberados">
+          <h2 id="titulo-liberados">Conteúdos para você</h2>
+          <div class="membros-grade" data-conteudos-liberados></div>
+          <p data-sem-liberados hidden>Em breve, mais conteúdos para o seu plano.</p>
+        </section>
+        <section class="membros-secao" aria-labelledby="titulo-outros">
+          <h2 id="titulo-outros">Disponíveis em outros planos</h2>
+          <div class="membros-grade" data-conteudos-bloqueados></div>
+        </section>
+        <p class="aviso-demo"><strong>Ambiente de demonstração:</strong> plano e conteúdos são locais e não validam uma assinatura real.</p>
+      </div>
+    </main>
+  </AreaProtegida>
 </Layout>
 
-<style>
-  .area-membros {
-    min-height: 100vh;
-    padding: 120px 0 80px;
-    background: var(--creme);
-  }
+<script>
+  import { auth } from "../../lib/auth";
+  import { conteudosMembros, obterPlanoMembro, temAcessoAoConteudo } from "../../lib/membros";
 
-  .area-membros__container {
-    max-width: 1000px;
-  }
+  const usuaria = await auth.usuariaAtual();
+  if (usuaria) {
+    const nome = document.querySelector<HTMLElement>("[data-boas-vindas]");
+    const planoTexto = document.querySelector<HTMLElement>("[data-plano-atual]");
+    const liberados = document.querySelector<HTMLElement>("[data-conteudos-liberados]");
+    const bloqueados = document.querySelector<HTMLElement>("[data-conteudos-bloqueados]");
+    const semLiberados = document.querySelector<HTMLElement>("[data-sem-liberados]");
+    const planoAtual = obterPlanoMembro(usuaria.plano);
+    if (nome) nome.textContent = `Que bom ter você aqui, ${usuaria.nome}.`;
+    if (planoTexto) planoTexto.textContent = planoAtual?.nome ?? "Não identificado";
 
-  .area-membros__voltar {
-    display: inline-block;
-    margin-bottom: 32px;
-    font-family: var(--font-titulo);
-    font-weight: 700;
-  }
-
-  .area-membros__voltar:hover,
-  .conteudo-card__rodape a:hover {
-    color: var(--vermelho);
-  }
-
-  .boas-vindas {
-    position: relative;
-    padding: clamp(32px, 7vw, 64px);
-    overflow: hidden;
-    border-radius: var(--raio);
-    background: var(--ameixa);
-    color: var(--creme);
-  }
-
-  .boas-vindas::after {
-    position: absolute;
-    right: -48px;
-    bottom: -100px;
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
-    background: var(--vermelho);
-    content: "";
-  }
-
-  .boas-vindas h1 {
-    max-width: 650px;
-    margin-bottom: 16px;
-    font-size: clamp(2.3rem, 5vw, 4rem);
-  }
-
-  .boas-vindas > p:not(.tag) {
-    max-width: 540px;
-    opacity: 0.85;
-  }
-
-  .boas-vindas .tag {
-    color: var(--creme);
-    border-color: rgba(253, 241, 234, 0.65);
-  }
-
-  .boas-vindas__plano {
-    position: relative;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 28px;
-    padding: 10px 18px;
-    border-radius: var(--capsula);
-    background: var(--creme);
-    color: var(--ameixa);
-  }
-
-  .boas-vindas__plano strong {
-    text-transform: capitalize;
-  }
-
-  .beneficios,
-  .conteudos {
-    margin-top: 64px;
-  }
-
-  .secao-cabecalho {
-    display: flex;
-    align-items: end;
-    justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 28px;
-  }
-
-  .secao-cabecalho .tag {
-    margin-bottom: 12px;
-  }
-
-  .secao-cabecalho h2,
-  .convite-plano h2 {
-    font-size: clamp(1.8rem, 4vw, 2.7rem);
-  }
-
-  .beneficios__lista {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-  }
-
-  .beneficio {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    min-height: 76px;
-    padding: 18px 20px;
-    border-radius: 20px;
-    background: #fff;
-  }
-
-  .beneficio span {
-    display: grid;
-    flex: 0 0 32px;
-    width: 32px;
-    height: 32px;
-    place-items: center;
-    border-radius: 50%;
-    background: var(--agua);
-    font-weight: 800;
-  }
-
-  .conteudos__legenda {
-    max-width: 280px;
-    opacity: 0.75;
-  }
-
-  .conteudos__grade {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
-  }
-
-  .conteudo-card {
-    display: flex;
-    min-height: 260px;
-    flex-direction: column;
-    padding: 28px;
-    border: 1px solid rgba(43, 28, 46, 0.12);
-    border-radius: var(--raio);
-    background: #fff;
-  }
-
-  .conteudo-card--bloqueado {
-    background: #f8eae4;
-  }
-
-  .conteudo-card__categoria {
-    margin-bottom: 20px;
-    color: var(--vermelho);
-    font-family: var(--font-titulo);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .conteudo-card h3 {
-    margin-bottom: 12px;
-    font-size: 1.45rem;
-  }
-
-  .conteudo-card__resumo {
-    opacity: 0.8;
-  }
-
-  .conteudo-card__rodape {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-top: auto;
-    padding-top: 24px;
-    font-family: var(--font-titulo);
-    font-size: 0.9rem;
-    font-weight: 700;
-  }
-
-  .conteudo-card__status {
-    color: #286553;
-  }
-
-  .conteudo-card__status--bloqueado {
-    color: var(--vermelho);
-  }
-
-  .convite-plano {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 32px;
-    margin-top: 72px;
-    padding: clamp(28px, 5vw, 48px);
-    border-radius: var(--raio);
-    background: var(--rosa);
-  }
-
-  .convite-plano .tag {
-    margin-bottom: 12px;
-  }
-
-  .convite-plano h2 {
-    max-width: 520px;
-    margin-bottom: 12px;
-  }
-
-  .nota-demo {
-    margin-top: 24px;
-    font-size: 0.85rem;
-    opacity: 0.7;
-  }
-
-  .aviso-plano {
-    grid-column: 1 / -1;
-  }
-
-  @media (max-width: 620px) {
-    .area-membros {
-      padding-top: 100px;
+    for (const conteudo of conteudosMembros) {
+      const liberado = temAcessoAoConteudo(usuaria.plano, conteudo.plano);
+      const planoNecessario = obterPlanoMembro(conteudo.plano);
+      const card = document.createElement("article");
+      card.className = liberado ? "membros-card" : "membros-card membros-card--bloqueado";
+      const categoria = document.createElement("p");
+      categoria.className = "membros-card__categoria";
+      categoria.textContent = conteudo.categoria;
+      const titulo = document.createElement("h3");
+      titulo.textContent = conteudo.titulo;
+      const resumo = document.createElement("p");
+      resumo.className = "membros-card__resumo";
+      resumo.textContent = conteudo.resumo;
+      const rodape = document.createElement("div");
+      rodape.className = "membros-card__rodape";
+      const status = document.createElement("span");
+      status.textContent = liberado ? "Disponível" : `🔒 ${planoNecessario?.nome ?? conteudo.plano}`;
+      const link = document.createElement("a");
+      link.href = `/membros/${conteudo.slug}`;
+      link.textContent = liberado ? "Acessar →" : "Ver acesso →";
+      link.setAttribute("aria-label", `${liberado ? "Acessar" : "Ver conteúdo bloqueado"}: ${conteudo.titulo}`);
+      rodape.append(status, link);
+      card.append(categoria, titulo, resumo, rodape);
+      (liberado ? liberados : bloqueados)?.append(card);
     }
 
-    .secao-cabecalho,
-    .convite-plano {
-      align-items: flex-start;
-      flex-direction: column;
-    }
-
-    .conteudos__legenda {
-      max-width: none;
-    }
+    if (semLiberados) semLiberados.hidden = conteudosMembros.some((conteudo) =>
+      temAcessoAoConteudo(usuaria.plano, conteudo.plano));
   }
-</style>
+</script>
