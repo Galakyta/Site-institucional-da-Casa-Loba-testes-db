@@ -63,10 +63,6 @@ export function getStaticPaths() {
       const bloqueio = document.createElement("section");
       bloqueio.className = "conteudo-bloqueado";
       bloqueio.setAttribute("aria-labelledby", "titulo-bloqueio");
-      const icone = document.createElement("p");
-      icone.setAttribute("aria-hidden", "true");
-      icone.textContent = "🔒";
-      icone.style.fontSize = "2.5rem";
       const aviso = document.createElement("p");
       aviso.className = "tag tag--ameixa";
       aviso.textContent = "conteúdo exclusivo";
@@ -92,7 +88,7 @@ export function getStaticPaths() {
       voltar.href = "/membros";
       voltar.textContent = "Voltar aos conteúdos";
       acoes.append(conhecer, voltar);
-      bloqueio.append(icone, aviso, titulo, resumo, descricao, lista, acoes);
+      bloqueio.append(aviso, titulo, resumo, descricao, lista, acoes);
       destino.append(bloqueio);
     }
   }

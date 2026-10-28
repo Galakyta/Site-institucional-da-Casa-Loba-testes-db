@@ -62,7 +62,7 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
       const rodape = document.createElement("div");
       rodape.className = "membros-card__rodape";
       const status = document.createElement("span");
-      status.textContent = liberado ? "Disponível" : `🔒 ${planoNecessario?.nome ?? conteudo.plano}`;
+      status.textContent = liberado ? "Disponível" : `Bloqueado · Plano ${planoNecessario?.nome ?? conteudo.plano}`;
       const link = document.createElement("a");
       link.href = `/membros/${conteudo.slug}`;
       link.textContent = liberado ? "Acessar →" : "Ver acesso →";

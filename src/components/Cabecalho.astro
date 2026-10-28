@@ -1,4 +1,6 @@
 ---
+import ModalLogin from "./ModalLogin.astro";
+
 interface Props {
   solido?: boolean;
 }
@@ -23,7 +25,7 @@ const { solido = false } = Astro.props;
       <a href="/#secao-frentes">[LINK: frentes]</a>
       <a href="/membros" class="nav-planos">planos</a>
       <div class="nav-auth" data-nav-auth>
-        <a class="btn btn--sm btn--vermelho" href="/entrar">Entrar</a>
+        <button class="btn btn--sm btn--vermelho" type="button" data-abrir-modal="modalLogin">Entrar</button>
         <a class="nav-auth__cadastro" href="/cadastro">Cadastrar</a>
       </div>
     </div>
@@ -85,9 +87,10 @@ const { solido = false } = Astro.props;
         menu.append(resumo, opcoes);
         area.append(menu);
       } else {
-        const entrar = document.createElement("a");
+        const entrar = document.createElement("button");
+        entrar.type = "button";
         entrar.className = "btn btn--sm btn--vermelho";
-        entrar.href = "/entrar";
+        entrar.dataset.abrirModal = "modalLogin";
         entrar.textContent = "Entrar";
         const cadastro = document.createElement("a");
         cadastro.className = "nav-auth__cadastro";
@@ -100,6 +103,7 @@ const { solido = false } = Astro.props;
     }
   }
 </script>
+<ModalLogin />
 
 <style>
   /* menu*/
@@ -165,6 +169,10 @@ const { solido = false } = Astro.props;
   .nav-links button {
     font-size: 0.95rem;
     transition: opacity 0.2s;
+  }
+
+  .nav-links button {
+    line-height: inherit;
   }
 
   .nav-links a:hover,
